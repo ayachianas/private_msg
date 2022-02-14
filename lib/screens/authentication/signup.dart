@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:private_msg/screens/conversations/conversations.dart';
 import 'package:private_msg/services/auth.dart';
 import 'package:private_msg/widgets/home_appbar.dart';
 
 class SignUp extends StatefulWidget {
-  const SignUp({Key? key}) : super(key: key);
+  final Function toggle;
+
+  SignUp(this.toggle);
 
   @override
   _SignUpState createState() => _SignUpState();
@@ -24,7 +27,11 @@ class _SignUpState extends State<SignUp> {
       });
 
       authMethods.signUpWithEmailAndPassword(emailTextEditingController.text,
-          passwordTextEditingController.text).then((value) => print("$value"));
+          passwordTextEditingController.text).then((value) {
+            Navigator.pushReplacement(context, MaterialPageRoute(
+                builder: (context) => const Conversations()
+            ));
+      });
     }
   }
 
@@ -102,10 +109,18 @@ class _SignUpState extends State<SignUp> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text("Already have an account? ", style: SimpleTextFielStyle(),),
-                  const Text("Sign In now", style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 17,
-                      decoration: TextDecoration.underline
+                  GestureDetector(
+                    onTap: () {
+                      widget.toggle();
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(vertical: 8.0),
+                      child: const Text("Sign In now", style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 17,
+                          decoration: TextDecoration.underline
+                        ),
+                      ),
                     ),
                   )
                 ],
