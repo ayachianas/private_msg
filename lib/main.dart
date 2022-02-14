@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:private_msg/screens/authentication/signin.dart';
-import 'package:private_msg/screens/authentication/signup.dart';
+import 'package:private_msg/screens/authentication/authenticate.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -16,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      home: SignUp(),
+      home: Authenticate()
     );
   }
 }
