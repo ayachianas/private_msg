@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:private_msg/screens/authentication/authenticate.dart';
+import 'package:private_msg/screens/splash_page.dart';
+import 'package:private_msg/services/navigation_service.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+
+void main() {
   runApp(const MyApp());
 }
 
@@ -14,8 +14,15 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Authenticate()
+    return SplashPage(
+      key: UniqueKey(),
+      onInitializationComplete: () {
+        runApp(MaterialApp(
+          title: 'Private MSG',
+          home: Authenticate(),
+          navigatorKey: NavigationService.navigatorKey,
+        ));
+      }
     );
   }
 }
