@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:private_msg/screens/conversations/conversations.dart';
-import 'package:private_msg/services/auth.dart';
+import 'package:private_msg/pages/conversations/conversations.dart';
 import 'package:private_msg/widgets/home_appbar.dart';
 
 class SignUp extends StatefulWidget {
@@ -13,7 +12,6 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  AuthMethods authMethods = AuthMethods();
   bool isLoading = false;
   final formKey = GlobalKey<FormState>();
   TextEditingController usernameTextEditingController = TextEditingController();
@@ -24,13 +22,6 @@ class _SignUpState extends State<SignUp> {
     if (formKey.currentState!.validate()) {
       setState(() {
         isLoading = true;
-      });
-
-      authMethods.signUpWithEmailAndPassword(emailTextEditingController.text,
-          passwordTextEditingController.text).then((value) {
-            Navigator.pushReplacement(context, MaterialPageRoute(
-                builder: (context) => const Conversations()
-            ));
       });
     }
   }

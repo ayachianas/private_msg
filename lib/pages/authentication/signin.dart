@@ -1,8 +1,16 @@
 // Packages
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
+import 'package:provider/provider.dart';
+
+// Providers
+import 'package:private_msg/providers/authentication_provider.dart';
 
 // Pages
 import 'package:private_msg/widgets/home_appbar.dart';
+
+// Services
+import '../../services/navigation_service.dart';
 
 // Widgets
 import '../../widgets/custom_input_fields.dart';
@@ -19,12 +27,21 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   late double _deviceHeight;
   late double _deviceWidth;
+
   final _signInKey = GlobalKey<FormState>();
+
+  String? _email;
+  String? _password;
+
+  late AuthenticationProvider _auth;
+  late NavigationService _navigation;
 
   @override
   Widget build(BuildContext context) {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
+    _auth = Provider.of<AuthenticationProvider>(context);
+    _navigation = GetIt.instance.get<NavigationService>();
     return _buildUI();
   }
 
@@ -79,13 +96,21 @@ class _SignInState extends State<SignIn> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CustomTextFormField(
-              onSaved: (_value) {},
+              onSaved: (_value) {
+                setState(() {
+                  _email = _value;
+                });
+              },
               regEx: r"",
               hintText: 'Email',
               obscureText: false
             ),
             CustomTextFormField(
-              onSaved: (_value) {},
+              onSaved: (_value) {
+                setState(() {
+                  _password = _value;
+                });
+              },
               regEx: r".{6,}",
               hintText: 'Password',
               obscureText: true
@@ -101,7 +126,12 @@ class _SignInState extends State<SignIn> {
       name: "Sign In",
       height: _deviceHeight *0.065,
       width: _deviceWidth * 0.65,
-      onPressed: () {},
+      onPressed: () {
+        if (_signInKey.currentState!.validate()) {
+          _signInKey.currentState!.save();
+          _auth.signInUsingEmailAndPassword(_email!, _password!);
+        }
+      },
     );
   }
 
