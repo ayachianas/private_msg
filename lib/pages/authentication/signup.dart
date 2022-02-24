@@ -165,6 +165,10 @@ class _SignUpState extends State<SignUp> {
         if (_signUpFormKey.currentState!.validate() && _profileImage!= null) {
           _signUpFormKey.currentState!.save();
           String? _uid = await _auth.signUpUsingEmailAndPassword(_email!, _password!);
+          /*
+          TODO: bug: Exception occurs when _auth state changes, we can't instantly get the user
+           for it hasn't been created, yet.
+          */
           String? _imageURL = await _cloudStorage.saveUserImageToStorage(_uid!, _profileImage!);
           await _db.createUser(_uid, _email!, _name!, _imageURL!);
           await _auth.logout();
