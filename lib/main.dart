@@ -10,6 +10,7 @@ import 'package:private_msg/services/navigation_service.dart';
 import 'package:private_msg/pages/splash_page.dart';
 import 'package:private_msg/pages/authentication/signin.dart';
 import 'package:private_msg/pages/home_page.dart';
+import 'package:private_msg/pages/authentication/signup.dart';
 
 
 void main() {
@@ -41,6 +42,7 @@ class MainApp extends StatelessWidget {
         routes: {
           '/signIn': (BuildContext _context) => SignIn(),
           '/home': (BuildContext _context) => HomePage(),
+          '/signup': (BuildContext _context) => SignUp(),
         },
       ),
     );

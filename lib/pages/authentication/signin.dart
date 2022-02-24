@@ -137,7 +137,7 @@ class _SignInState extends State<SignIn> {
 
   Widget _signUpLink() {
     return GestureDetector(
-      onTap: () {},
+      onTap: () => _navigation.navigateToRoute('/signup'),
       child: Container(
         child: const Text(
           "Don't have an account?",
