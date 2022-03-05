@@ -16,6 +16,12 @@ import 'package:private_msg/models/chat.dart';
 import 'package:private_msg/models/chat_user.dart';
 import 'package:private_msg/models/chat_message.dart';
 
+// Services
+import 'package:private_msg/services/navigation_service.dart';
+
+// Pages
+import 'package:private_msg/pages/chat_page.dart';
+
 
 class ChatsPage extends StatefulWidget {
   const ChatsPage({Key? key}) : super(key: key);
@@ -29,6 +35,7 @@ class _ChatsPageState extends State<ChatsPage> {
   late double _deviceWidth;
 
   late AuthenticationProvider _auth;
+  late NavigationService _navigation;
   late ChatsPageProvider _pageProvider;
 
   @override
@@ -36,6 +43,7 @@ class _ChatsPageState extends State<ChatsPage> {
     _deviceHeight = MediaQuery.of(context).size.height;
     _deviceWidth = MediaQuery.of(context).size.width;
     _auth = Provider.of<AuthenticationProvider>(context);
+    _navigation = GetIt.instance.get<NavigationService>();
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ChatsPageProvider>(
@@ -120,7 +128,7 @@ class _ChatsPageState extends State<ChatsPage> {
     String _subtitleText = "";
     if (_chat.messages.isNotEmpty) {
       _subtitleText = _chat.messages.first.type != MessageType.TEXT
-          ? "Media attachement"
+          ? "Media attachment"
           : _chat.messages.first.content;
     }
     return CustomListViewTileWithActivity(
@@ -130,7 +138,11 @@ class _ChatsPageState extends State<ChatsPage> {
       imagePath: _chat.imageURL(),
       isActive: _isActive,
       isActivity: _chat.activity,
-      onTap: () {},
+      onTap: () {
+        _navigation.navigateToPage(
+          ChatPage(chat: _chat),
+        );
+      },
     );
   }
 }
