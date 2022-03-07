@@ -15,7 +15,6 @@ import 'package:private_msg/models/chat_message.dart';
 import 'package:private_msg/providers/authentication_provider.dart';
 import 'package:private_msg/providers/chat_page_provider.dart';
 
-
 class ChatPage extends StatefulWidget {
   final Chat chat;
 
@@ -52,7 +51,11 @@ class _ChatPageState extends State<ChatPage> {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider<ChatPageProvider>(
-          create: (_) => ChatPageProvider(widget.chat.uid, _auth, _messagesListViewController,),
+          create: (_) => ChatPageProvider(
+            widget.chat.uid,
+            _auth,
+            _messagesListViewController,
+          ),
         ),
       ],
       child: _buildUI(),
@@ -113,12 +116,17 @@ class _ChatPageState extends State<ChatPage> {
           child: ListView.builder(
             itemCount: _pageProvider.messages!.length,
             itemBuilder: (BuildContext _context, int _index) {
+              ChatMessage _message = _pageProvider.messages![_index];
+              bool isOwnMessage = _message.senderID == _auth.user.uid;
               return Container(
-                child: Text(
-                  _pageProvider.messages![_index].content,
-                  style: TextStyle(
-                    color: Colors.black,
-                  ),
+                child: CustomChatListViewTile(
+                  deviceHeight: _deviceHeight,
+                  deviceWidth: _deviceWidth * 0.8,
+                  message: _message,
+                  isOwnMessage: isOwnMessage,
+                  sender: widget.chat.members
+                      .where((_member) => _member.uid == _message.senderID)
+                      .first,
                 ),
               );
             },
