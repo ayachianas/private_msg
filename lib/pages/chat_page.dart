@@ -84,14 +84,18 @@ class _ChatPageState extends State<ChatPage> {
                     widget.chat.title(),
                     fontSize: 10,
                     primaryAction: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _pageProvider.deleteChat();
+                      },
                       icon: const Icon(
                         Icons.delete,
                         color: Colors.red,
                       ),
                     ),
                     secondaryAction: IconButton(
-                      onPressed: () {},
+                      onPressed: () {
+                        _pageProvider.goBack();
+                      },
                       icon: const Icon(
                         Icons.arrow_back,
                         color: Colors.red,
@@ -99,6 +103,7 @@ class _ChatPageState extends State<ChatPage> {
                     ),
                   ),
                   _messagesListView(),
+                  _sendMessageForm(),
                 ],
               ),
             ),
@@ -114,6 +119,7 @@ class _ChatPageState extends State<ChatPage> {
         return Container(
           height: _deviceHeight * 0.74,
           child: ListView.builder(
+            controller: _messagesListViewController,
             itemCount: _pageProvider.messages!.length,
             itemBuilder: (BuildContext _context, int _index) {
               ChatMessage _message = _pageProvider.messages![_index];
@@ -150,5 +156,82 @@ class _ChatPageState extends State<ChatPage> {
         ),
       );
     }
+  }
+
+  Widget _sendMessageForm() {
+    return Container(
+      height: _deviceHeight * 0.06,
+      decoration: BoxDecoration(
+        color: Colors.blueAccent,
+        borderRadius: BorderRadius.circular(100),
+      ),
+      margin: EdgeInsets.symmetric(
+        horizontal: _deviceWidth * 0.04,
+        vertical: _deviceHeight * 0.03,
+      ),
+      child: Form(
+        key: _messageFormState,
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            _messageTextField(),
+            _sendMessageButton(),
+            _imageMessageButton(),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _messageTextField() {
+    return SizedBox(
+      width: _deviceWidth * 0.65,
+      child: CustomTextFormField(
+        onSaved: (_value) {
+          _pageProvider.message = _value;
+        },
+        regEx: r"^(?!\s*$).+",
+        hintText: "Type a message",
+        obscureText: false,
+      ),
+    );
+  }
+
+  Widget _sendMessageButton() {
+    double _size = _deviceHeight * 0.04;
+    return Container(
+      height: _size,
+      width: _size,
+      child: IconButton(
+        icon: Icon(
+          Icons.send,
+        color: Colors.white,
+        ),
+        onPressed: () {
+          if (_messageFormState.currentState!.validate()) {
+            _messageFormState.currentState!.save();
+            _pageProvider.sendTextMessage();
+            _messageFormState.currentState!.reset();
+          }
+        },
+      ),
+    );
+  }
+
+  Widget _imageMessageButton() {
+    double _size = _deviceHeight * 0.04;
+    return Container(
+      height: _size,
+      width: _size,
+      child: FloatingActionButton(
+        backgroundColor: Colors.green,
+        onPressed: () {
+          _pageProvider.sendImageMessage();
+        },
+        child: Icon(Icons.camera_enhance),
+      ),
+    );
   }
 }
