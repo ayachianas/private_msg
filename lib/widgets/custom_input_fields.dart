@@ -59,7 +59,7 @@ class CustomTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
-      onEditingComplete: onEditingComplete(controller.value.text),
+      onEditingComplete: () => onEditingComplete(controller.value.text),
       cursorColor: Colors.grey,
       style: TextStyle(
         color: Colors.black,
